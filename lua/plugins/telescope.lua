@@ -6,10 +6,21 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			-- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
-			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make", cond = vim.fn.executable("make") == 1 },
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "make",
+				cond = vim.fn.executable("make") == 1
+			},
+			{ 
+				"nvim-telescope/telescope-live-grep-args.nvim" ,
+				version = "^1.0.0",
+			},
 		},
 		config = function()
-			require("telescope").setup({
+			local telescope = require('telescope')
+			local lga_actions = require("telescope-live-grep-args.actions")
+
+			telescope.setup({
 				defaults = {
 					mappings = {
 						i = {
@@ -18,29 +29,51 @@ return {
 						},
 					},
 				},
+
+				extensions = {
+					live_grep_args = {
+						auto_quoting = true, -- enable/disable auto-quoting
+						-- define mappings, e.g.
+						mappings = { -- extend mappings
+							i = {
+								["<C-k>"] = lga_actions.quote_prompt(),
+								["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob **//**" }),
+								-- freeze the current list and start a fuzzy search in the frozen list
+								["<C-space>"] = lga_actions.to_fuzzy_refine,
+							},
+						},
+						-- ... also accepts theme settings, for example:
+						-- theme = "dropdown", -- use dropdown theme
+						-- theme = { }, -- use own theme spec
+						-- layout_config = { mirror=true }, -- mirror preview pane
+					}
+				}
 			})
 
 			-- Enable telescope fzf native, if installed
-			pcall(require("telescope").load_extension, "fzf")
+			telescope.load_extension("fzf")
+			telescope.load_extension("live_grep_args")
+			-- pcall(require("telescope").load_extension, "fzf")
+			-- pcall(require("telescope").load_extension, "live_grep_args")
 
 			local map = require("helpers.keys").map
 			map("n", "<leader>fr", require("telescope.builtin").oldfiles, "Recently opened")
-			map("n", "<leader>bb", require("telescope.builtin").buffers, "Open buffers")
+			map("n", "<leader>,", require("telescope.builtin").buffers, "Open buffers")
 			map("n", "<leader>/", function()
 				-- You can pass additional configuration to telescope to change theme, layout, etc.
 				require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
 					winblend = 10,
 					previewer = false,
 				}))
-			end, "Search in current buffer")
+				end, "Search in current buffer")
 
-			map("n", "<leader><space>", require("telescope.builtin").find_files, "Files")
-			map("n", "<leader>sf", require("telescope.builtin").git_files, "Git Files")
+			map("n", "<leader>sf", require("telescope.builtin").find_files, "Files")
+			map("n", "<leader><space>", require("telescope.builtin").git_files, "Git Files")
 			map("n", "<leader>sh", require("telescope.builtin").help_tags, "Help")
 			map("n", "<leader>sw", require("telescope.builtin").grep_string, "Current word")
 			map("n", "<leader>sg", require("telescope.builtin").live_grep, "Grep")
 			map("n", "<leader>sd", require("telescope.builtin").diagnostics, "Diagnostics")
-
+			map("n", "<leader>sa", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", "Grep (args)")
 			map("n", "<C-p>", require("telescope.builtin").keymaps, "Search keymaps")
 		end,
 	},

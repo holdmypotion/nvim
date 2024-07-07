@@ -1,16 +1,16 @@
 local opts = {
-	shiftwidth = 4,
-	tabstop = 4,
-	expandtab = true,
-	wrap = false,
-	termguicolors = true,
-	number = true,
-	relativenumber = true,
+  shiftwidth = 2,
+  tabstop = 2,
+  expandtab = true,
+  wrap = true,
+  termguicolors = true,
+  number = true,
+  relativenumber = true
 }
 
 -- Set options from table
 for opt, val in pairs(opts) do
-	vim.o[opt] = val
+  vim.o[opt] = val
 end
 
 -- Set other options
@@ -116,14 +116,14 @@ opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
 
-if vim.fn.has("nvim-0.10") == 1 then
-  opt.smoothscroll = true
-  -- opt.foldmethod = "expr"
-  opt.foldtext = ""
-else
-  -- opt.foldmethod = "indent"
-end
+-- if vim.fn.has("nvim-0.10") == 1 then
+--   opt.smoothscroll = true
+--   opt.foldmethod = "expr"
+--   opt.foldtext = ""
+-- else
+--   opt.foldmethod = "indent"
+-- end
+opt.foldmethod = "indent"
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
-
