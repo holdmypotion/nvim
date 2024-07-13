@@ -101,3 +101,6 @@ map("n", "]e", diagnostic_goto(true, "ERROR"), "Next Error")
 map("n", "[e", diagnostic_goto(false, "ERROR"), "Prev Error")
 map("n", "]w", diagnostic_goto(true, "WARN"), "Next Warning")
 map("n", "[w", diagnostic_goto(false, "WARN"), "Prev Warning")
+
+
+map("i", "<M-BS>", "<C-w>", "Remove word")
