@@ -1,8 +1,5 @@
 local map = require("helpers.keys").map
 
--- Blazingly fast way out of insert mode
-map("i", "jk", "<esc>")
-
 -- Quick access to some common actions
 map("n", "<leader>fw", "<cmd>w<cr>", "Write")
 map("n", "<leader>fa", "<cmd>wa<cr>", "Write all")
@@ -11,7 +8,7 @@ map("n", "<leader>qa", "<cmd>qa!<cr>", "Quit all")
 map("n", "<leader>dw", "<cmd>close<cr>", "Window")
 
 -- Diagnostic keymaps
-map('n', 'gx', vim.diagnostic.open_float, "Show diagnostics under cursor")
+map("n", "gx", vim.diagnostic.open_float, "Show diagnostics under cursor")
 
 -- Easier access to beginning and end of lines
 map("n", "<M-h>", "^", "Go to beginning of line")
@@ -75,7 +72,7 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
-vim.api.nvim_set_keymap('n', '<Leader>cp', ':let @+ = expand("%")<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<Leader>cp", ':let @+ = expand("%")<CR>', { noremap = true, silent = true })
 
 -- windows
 vim.keymap.set("n", "<leader>ww", "<C-W>p", { desc = "Other Window", remap = true })
@@ -85,14 +82,13 @@ vim.keymap.set("n", "<leader>w|", "<C-W>v", { desc = "Split Window Right", remap
 vim.keymap.set("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 vim.keymap.set("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 
-
 -- diagnostic
 local diagnostic_goto = function(next, severity)
-  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-  severity = severity and vim.diagnostic.severity[severity] or nil
-  return function()
-    go({ severity = severity })
-  end
+	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+	severity = severity and vim.diagnostic.severity[severity] or nil
+	return function()
+		go({ severity = severity })
+	end
 end
 map("n", "<leader>cd", vim.diagnostic.open_float, "Line Diagnostics")
 map("n", "]d", diagnostic_goto(true), "Next Diagnostic")
@@ -102,5 +98,74 @@ map("n", "[e", diagnostic_goto(false, "ERROR"), "Prev Error")
 map("n", "]w", diagnostic_goto(true, "WARN"), "Next Warning")
 map("n", "[w", diagnostic_goto(false, "WARN"), "Prev Warning")
 
+-- Diagnostic toggles
+map("n", "<leader>dt", function()
+	local current_value = vim.diagnostic.is_disabled()
+	vim.diagnostic.enable()
+	if not current_value then
+		vim.diagnostic.disable()
+	end
+end, "Toggle diagnostics globally")
 
+map("n", "<leader>db", function()
+	local current_value = vim.diagnostic.is_disabled(0)
+	vim.diagnostic.enable(0)
+	if not current_value then
+		vim.diagnostic.disable(0)
+	end
+end, "Toggle diagnostics in current buffer")
+
+-- Handy maps
 map("i", "<M-BS>", "<C-w>", "Remove word")
+map("n", "<leader>uw", ":set wrap<CR>", "Word Wrap")
+map("n", "<leader>uq", ":set nowrap<CR>", "Word No-Wrap")
+
+-- Toggle colorcolumn (ruler)
+map("n", "<leader>ur", function()
+	if vim.wo.colorcolumn == "" then
+		-- Restore based on filetype
+		local ft = vim.bo.filetype
+		if ft == "python" then
+			vim.wo.colorcolumn = "90"
+		elseif vim.tbl_contains({ "java", "cpp", "c", "rust", "go" }, ft) then
+			vim.wo.colorcolumn = "100"
+		else
+			vim.wo.colorcolumn = "90"
+		end
+		vim.notify("Colorcolumn enabled", vim.log.levels.INFO)
+	else
+		vim.wo.colorcolumn = ""
+		vim.notify("Colorcolumn disabled", vim.log.levels.INFO)
+	end
+end, "Toggle ruler (colorcolumn)")
+
+-- Toggle auto-format on save for Python files
+map("n", "<leader>ft", function()
+	vim.g.autoformat_on_save = not vim.g.autoformat_on_save
+	local status = vim.g.autoformat_on_save and "enabled" or "disabled"
+	vim.notify("Global auto-format on save " .. status, vim.log.levels.INFO)
+end, "Toggle global auto-format on save")
+
+-- Avante
+map("n", "<leader>at", "<cmd>AvanteToggle<cr>", "Run Avante")
+map("n", "<leader>ac", "<cmd>AvanteChat<cr>", "Run Avante")
+vim.api.nvim_create_autocmd("User", {
+	pattern = "ToggleMyPrompt",
+	callback = function()
+		require("avante.config").override({ system_prompt = "MY CUSTOM SYSTEM PROMPT" })
+	end,
+})
+
+vim.keymap.set("n", "<leader>am", function()
+	vim.api.nvim_exec_autocmds("User", { pattern = "ToggleMyPrompt" })
+end, { desc = "avante: toggle my prompt" })
+
+-- Toggle colorizer manually
+vim.keymap.set("n", "<leader>cc", "<cmd>ColorizerToggle<CR>", { desc = "Toggle colorizer" })
+
+-- Tmux sessionizer
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tsession<CR>")
+vim.keymap.set("n", "<M-h>", "<cmd>silent !tmux neww tsession -s 0<CR>")
+vim.keymap.set("n", "<M-t>", "<cmd>silent !tmux neww tsession -s 1<CR>")
+vim.keymap.set("n", "<M-n>", "<cmd>silent !tmux neww tsession -s 2<CR>")
+vim.keymap.set("n", "<M-s>", "<cmd>silent !tmux neww tsession -s 3<CR>")

@@ -5,21 +5,25 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make", cond = vim.fn.executable("make") == 1 },
-      { 
-        "nvim-telescope/telescope-live-grep-args.nvim" ,
+      {
+        "nvim-telescope/telescope-live-grep-args.nvim",
         version = "^1.0.0",
       },
     },
     config = function()
-      local telescope = require('telescope')
+      local telescope = require("telescope")
       local actions = require("telescope.actions")
       local lga_actions = require("telescope-live-grep-args.actions")
       --
       telescope.setup({
         defaults = {
           mappings = {
+            n = {
+              ["dd"] = require("telescope.actions").delete_buffer,
+            },
             i = {
               ["<esc>"] = actions.close,
+              ["dd"] = require("telescope.actions").delete_buffer,
             },
           },
           vimgrep_arguments = {
@@ -38,7 +42,7 @@ return {
 
           pickers = {
             find_files = {
-              find_command = { "rg", "--files", "-i", "--hidden", "--glob", "!**/.git/*" },
+              find_command = { "rg", "--files", "-i", "--hidden", "--no-ignore", "--glob", "!**/.git/*" },
             },
           },
         },
@@ -47,7 +51,7 @@ return {
           live_grep_args = {
             auto_quoting = true, -- enable/disable auto-quoting
             -- define mappings, e.g.
-            mappings = { -- extend mappings
+            mappings = {   -- extend mappings
               i = {
                 ["<C-k>"] = lga_actions.quote_prompt(),
                 ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob **//**" }),
@@ -59,8 +63,8 @@ return {
             -- theme = "dropdown", -- use dropdown theme
             -- theme = { }, -- use own theme spec
             -- layout_config = { mirror=true }, -- mirror preview pane
-          }
-        }
+          },
+        },
       })
 
       -- Enable telescope fzf native, if installed
@@ -77,15 +81,19 @@ return {
           winblend = 10,
           previewer = false,
         }))
-      end, "Search in current buffer"
-      )
+      end, "Search in current buffer")
       map("n", "<leader><space>", require("telescope.builtin").find_files, "Files")
       map("n", "<leader>sf", require("telescope.builtin").git_files, "Git Files")
       map("n", "<leader>sh", require("telescope.builtin").help_tags, "Help")
       map("n", "<leader>sw", require("telescope.builtin").grep_string, "Current word")
       map("n", "<leader>sg", require("telescope.builtin").live_grep, "Grep")
       map("n", "<leader>sd", require("telescope.builtin").diagnostics, "Diagnostics")
-      map("n", "<leader>sa", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", "Grep (args)")
+      map(
+        "n",
+        "<leader>sa",
+        ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
+        "Grep (args)"
+      )
       map("n", "<C-p>", require("telescope.builtin").keymaps, "Search keymaps")
     end,
   },
