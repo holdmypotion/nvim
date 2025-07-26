@@ -48,11 +48,11 @@ map("v", ">", ">gv")
 
 -- Switch between light and dark modes
 map("n", "<leader>ut", function()
-    if vim.o.background == "dark" then
-        vim.o.background = "light"
-    else
-        vim.o.background = "dark"
-    end
+	if vim.o.background == "dark" then
+		vim.o.background = "light"
+	else
+		vim.o.background = "dark"
+	end
 end, "Toggle between light and dark themes")
 
 -- Clear after search
@@ -84,11 +84,11 @@ vim.keymap.set("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap 
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
-    local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-    severity = severity and vim.diagnostic.severity[severity] or nil
-    return function()
-        go({ severity = severity })
-    end
+	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+	severity = severity and vim.diagnostic.severity[severity] or nil
+	return function()
+		go({ severity = severity })
+	end
 end
 map("n", "<leader>cd", vim.diagnostic.open_float, "Line Diagnostics")
 map("n", "]d", diagnostic_goto(true), "Next Diagnostic")
@@ -100,19 +100,19 @@ map("n", "[w", diagnostic_goto(false, "WARN"), "Prev Warning")
 
 -- Diagnostic toggles
 map("n", "<leader>dt", function()
-    local current_value = vim.diagnostic.is_disabled()
-    vim.diagnostic.enable()
-    if not current_value then
-        vim.diagnostic.disable()
-    end
+	local current_value = vim.diagnostic.is_disabled()
+	vim.diagnostic.enable()
+	if not current_value then
+		vim.diagnostic.disable()
+	end
 end, "Toggle diagnostics globally")
 
 map("n", "<leader>db", function()
-    local current_value = vim.diagnostic.is_disabled(0)
-    vim.diagnostic.enable(0)
-    if not current_value then
-        vim.diagnostic.disable(0)
-    end
+	local current_value = vim.diagnostic.is_disabled(0)
+	vim.diagnostic.enable(0)
+	if not current_value then
+		vim.diagnostic.disable(0)
+	end
 end, "Toggle diagnostics in current buffer")
 
 -- Handy maps
@@ -122,42 +122,42 @@ map("n", "<leader>uq", ":set nowrap<CR>", "Word No-Wrap")
 
 -- Toggle colorcolumn (ruler)
 map("n", "<leader>ur", function()
-    if vim.wo.colorcolumn == "" then
-        -- Restore based on filetype
-        local ft = vim.bo.filetype
-        if ft == "python" then
-            vim.wo.colorcolumn = "90"
-        elseif vim.tbl_contains({ "java", "cpp", "c", "rust", "go" }, ft) then
-            vim.wo.colorcolumn = "100"
-        else
-            vim.wo.colorcolumn = "90"
-        end
-        vim.notify("Colorcolumn enabled", vim.log.levels.INFO)
-    else
-        vim.wo.colorcolumn = ""
-        vim.notify("Colorcolumn disabled", vim.log.levels.INFO)
-    end
+	if vim.wo.colorcolumn == "" then
+		-- Restore based on filetype
+		local ft = vim.bo.filetype
+		if ft == "python" then
+			vim.wo.colorcolumn = "90"
+		elseif vim.tbl_contains({ "java", "cpp", "c", "rust", "go" }, ft) then
+			vim.wo.colorcolumn = "100"
+		else
+			vim.wo.colorcolumn = "90"
+		end
+		vim.notify("Colorcolumn enabled", vim.log.levels.INFO)
+	else
+		vim.wo.colorcolumn = ""
+		vim.notify("Colorcolumn disabled", vim.log.levels.INFO)
+	end
 end, "Toggle ruler (colorcolumn)")
 
 -- Toggle auto-format on save for Python files
 map("n", "<leader>ft", function()
-    vim.g.autoformat_on_save = not vim.g.autoformat_on_save
-    local status = vim.g.autoformat_on_save and "enabled" or "disabled"
-    vim.notify("Global auto-format on save " .. status, vim.log.levels.INFO)
+	vim.g.autoformat_on_save = not vim.g.autoformat_on_save
+	local status = vim.g.autoformat_on_save and "enabled" or "disabled"
+	vim.notify("Global auto-format on save " .. status, vim.log.levels.INFO)
 end, "Toggle global auto-format on save")
 
 -- Avante
 map("n", "<leader>at", "<cmd>AvanteToggle<cr>", "Run Avante")
 map("n", "<leader>ac", "<cmd>AvanteChat<cr>", "Run Avante")
 vim.api.nvim_create_autocmd("User", {
-    pattern = "ToggleMyPrompt",
-    callback = function()
-        require("avante.config").override({ system_prompt = "MY CUSTOM SYSTEM PROMPT" })
-    end,
+	pattern = "ToggleMyPrompt",
+	callback = function()
+		require("avante.config").override({ system_prompt = "MY CUSTOM SYSTEM PROMPT" })
+	end,
 })
 
 vim.keymap.set("n", "<leader>am", function()
-    vim.api.nvim_exec_autocmds("User", { pattern = "ToggleMyPrompt" })
+	vim.api.nvim_exec_autocmds("User", { pattern = "ToggleMyPrompt" })
 end, { desc = "avante: toggle my prompt" })
 
 -- Toggle colorizer manually
