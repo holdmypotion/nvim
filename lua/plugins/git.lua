@@ -45,22 +45,22 @@ return {
       }
     end
   },
-  {
-    "kdheepak/lazygit.nvim",
-    cmd = {
-      "LazyGit",
-      "LazyGitConfig",
-      "LazyGitCurrentFile",
-      "LazyGitFilter",
-      "LazyGitFilterCurrentFile",
-    },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    keys = {
-      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-    }
-  },
+  -- {
+  --   "kdheepak/lazygit.nvim",
+  --   cmd = {
+  --     "LazyGit",
+  --     "LazyGitConfig",
+  --     "LazyGitCurrentFile",
+  --     "LazyGitFilter",
+  --     "LazyGitFilterCurrentFile",
+  --   },
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  --   keys = {
+  --     { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
+  --   }
+  -- },
   {
     "akinsho/git-conflict.nvim",
     commit = "2957f74",
