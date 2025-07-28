@@ -17,6 +17,13 @@ return {
   },
   {
     "shortcuts/no-neck-pain.nvim",
+    cmd = "NoNeckPain",
+    keys = { { "<leader>zn", "<cmd>NoNeckPain<cr>", desc = "[N]o [N]eckpain" } },
+    config = function()
+      require("no-neck-pain").setup({
+        width = 120,
+      })
+    end,
   },
   -- Better buffer closing actions. Available via the buffers helper.
   {
@@ -77,4 +84,24 @@ return {
   --     require('colorizer').setup()
   --   end
   -- },
+  {
+    "mg979/vim-visual-multi",
+    branch = "master",
+    config = function()
+      vim.g.VM_maps = {
+        ["Find Under"] = "<C-n>",
+        ["Find Subword Under"] = "<C-n>",
+        ["Select All"] = "<C-d>",
+        ["Visual Add"] = "<C-m>",
+      }
+
+      vim.keymap.set("n", "<M-Down>", "<Plug>(VM-Add-Cursor-Down)", { desc = "Add cursor down" })
+      vim.keymap.set("n", "<M-Up>", "<Plug>(VM-Add-Cursor-Up)", { desc = "Add cursor up" })
+      vim.keymap.set("n", "<M-j>", "<Plug>(VM-Add-Cursor-Down)", { desc = "Add cursor down" })
+      vim.keymap.set("n", "<M-k>", "<Plug>(VM-Add-Cursor-Up)", { desc = "Add cursor up" })
+
+      vim.cmd("highlight VM_Mono cterm=None ctermbg=cyan ctermfg=238 gui=underline guifg=red")
+    end,
+  },
 }
+

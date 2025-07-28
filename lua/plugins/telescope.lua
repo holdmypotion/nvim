@@ -53,7 +53,7 @@ return {
                     "--line-number",
                     "--column",
                     "--smart-case",
-                    -- "--hidden",
+                    "--hidden",
                     "--glob=!.git/",
                     "--glob=!node_modules/",
                     "--glob=!.cache/",
@@ -142,14 +142,18 @@ return {
             local map = require("helpers.keys").map
 
             -- normal mode
-            map("n", "<leader><space>", builtin.find_files, "Files")
+            map("n", "<leader><space>", function()
+                builtin.find_files({ hidden = true })
+            end, "Files")
             map("n", "<leader>sg", builtin.git_files, "Git Files")
             map("n", "<leader>sw", builtin.grep_string, "Current word")
             map("n", "<leader>sd", builtin.diagnostics, "Diagnostics")
             map("n", "<leader>sa", function()
                 telescope.extensions.live_grep_args.live_grep_args()
             end, "Grep (args)")
-            map("n", "<leader>sf", "<cmd>Telescope find_files<cr>", "Fuzzy find files in cwd")
+            map("n", "<leader>sf", function()
+                builtin.find_files({ hidden = true })
+            end, "Fuzzy find files in cwd")
 
             map("n", "<leader>sh", builtin.help_tags, "[S]earch [H]elp")
             map("n", "<leader>sk", builtin.keymaps, "[S]earch [K]eymaps")
@@ -157,7 +161,7 @@ return {
             map("n", "<leader>s.", builtin.resume, "[S]earch again")
             map("n", "<leader>sr", builtin.oldfiles, "[S]earch [R]ecent")
             map("n", "<leader>sn", function()
-                builtin.find_files({ cwd = "~/.config/nvim/" })
+                builtin.find_files({ cwd = "~/.config/nvim/", hidden = true })
             end, "[S]earch [N]vim config")
 
             -- visual mode
