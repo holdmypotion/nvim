@@ -51,21 +51,9 @@ return {
     "jackMort/ChatGPT.nvim",
     event = "VeryLazy",
     config = function()
-      local function get_chatgpt_key()
-        local key_path = os.getenv("OPEN_API_KEY") or (os.getenv("HOME") .. "/.secret/.chatgpt")
-        local file = io.open(key_path, "r")
-        if not file then
-          vim.notify("ChatGPT API key not found at: " .. key_path, vim.log.levels.ERROR)
-          return ""
-        end
-        local key = file:read("*a")
-        file:close()
-        return "echo " .. key
-      end
-
       local chatgpt = require("chatgpt")
       chatgpt.setup({
-        api_key_cmd = get_chatgpt_key(),
+        api_key_cmd = os.getenv("OPEN_API_KEY"),
         yank_register = " ",
         edit_with_instructions = {
           diff = false,
