@@ -72,7 +72,7 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
-vim.api.nvim_set_keymap("n", "<Leader>cp", ':let @+ = expand("%")<CR>:echo "Path copied to clipboard"<CR>', { noremap = true, silent = true })
+vim.keymap.set("n", "<Leader>cp", ':let @+ = expand("%")<CR>:echo "Path copied to clipboard"<CR>', { noremap = true, silent = true })
 
 -- windows
 vim.keymap.set("n", "<leader>ww", "<C-W>p", { desc = "Other Window", remap = true })
@@ -117,8 +117,15 @@ end, "Toggle diagnostics in current buffer")
 
 -- Handy maps
 map("i", "<M-BS>", "<C-w>", "Remove word")
-map("n", "<leader>uw", ":set wrap<CR>", "Word Wrap")
-map("n", "<leader>uq", ":set nowrap<CR>", "Word No-Wrap")
+map("n", "<leader>uw", function()
+	if vim.wo.wrap then
+		vim.wo.wrap = false
+		vim.notify("Word wrap disabled", vim.log.levels.INFO)
+	else
+		vim.wo.wrap = true
+		vim.notify("Word wrap enabled", vim.log.levels.INFO)
+	end
+end, "Toggle word wrap")
 
 -- Toggle colorcolumn (ruler)
 map("n", "<leader>ur", function()
