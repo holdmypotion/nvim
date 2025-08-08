@@ -80,6 +80,14 @@ return {
                 vim.opt.colorcolumn = "0"
             end)
         end
+ 
+    },
+
+    {
+        'brenoprata10/nvim-highlight-colors',
+        config = function()
+            require('nvim-highlight-colors').setup({})
+        end
     },
 
     -- Alpha

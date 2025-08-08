@@ -1,24 +1,111 @@
-local opts = {
-  shiftwidth = 2,
-  tabstop = 2,
-  expandtab = true,
-  wrap = true,
-  termguicolors = true,
-  number = true,
-  relativenumber = true
+-- ============================================================================
+-- NEOVIM OPTIONS CONFIGURATION
+-- ============================================================================
+
+-- ============================================================================
+-- BASIC EDITOR OPTIONS
+-- ============================================================================
+local opt = vim.opt
+
+-- Indentation
+opt.shiftwidth = 2 -- Size of an indent
+opt.tabstop = 2 -- Number of spaces tabs count for
+opt.expandtab = true -- Use spaces instead of tabs
+opt.shiftround = true -- Round indent
+opt.smartindent = true -- Insert indents automatically
+
+-- Line numbers and display
+opt.number = true -- Print line number
+opt.relativenumber = true -- Relative line numbers
+opt.cursorline = true -- Enable highlighting of the current line
+opt.wrap = false -- Disable line wrap
+opt.linebreak = true -- Wrap lines at convenient points
+opt.signcolumn = "yes" -- Always show the signcolumn
+
+-- Colors and appearance
+opt.termguicolors = true -- True color support
+vim.opt.title = true
+opt.showmode = false -- Don't show mode since we have a statusline
+opt.laststatus = 3 -- Global statusline
+opt.pumblend = 10 -- Popup blend
+opt.pumheight = 10 -- Maximum number of entries in a popup
+
+-- ============================================================================
+-- SEARCH AND CASE HANDLING
+-- ============================================================================
+opt.ignorecase = true -- Ignore case
+opt.smartcase = true -- Don't ignore case with capitals
+opt.inccommand = "nosplit" -- Preview incremental substitute
+opt.grepformat = "%f:%l:%c:%m"
+opt.grepprg = "rg --vimgrep"
+
+-- ============================================================================
+-- FOLDING CONFIGURATION
+-- ============================================================================
+opt.foldmethod = "indent"
+opt.foldlevel = 99
+opt.fillchars = {
+    foldopen = "",
+    foldclose = "",
+    fold = " ",
+    foldsep = " ",
+    diff = "╱",
+    eob = " ",
 }
 
-vim.opt.termguicolors = true
+-- ============================================================================
+-- WINDOW AND SPLIT BEHAVIOR
+-- ============================================================================
+opt.splitbelow = true -- Put new windows below current
+opt.splitright = true -- Put new windows right of current
+opt.splitkeep = "screen"
+opt.winminwidth = 5 -- Minimum window width
+opt.scrolloff = 4 -- Lines of context
+opt.sidescrolloff = 8 -- Columns of context
 
--- Set options from table
-for opt, val in pairs(opts) do
-  vim.o[opt] = val
-end
+-- ============================================================================
+-- COMPLETION AND INTERACTION
+-- ============================================================================
+opt.completeopt = "menu,menuone,noselect"
+opt.wildmode = "longest:full,full" -- Command-line completion mode
+opt.mouse = "a" -- Enable mouse mode
+opt.confirm = true -- Confirm to save changes before exiting modified buffer
+opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
 
--- Set other options
--- local colorscheme = require("helpers.colorscheme")
--- vim.cmd.colorscheme(colorscheme)
+-- ============================================================================
+-- FILES AND SESSIONS
+-- ============================================================================
+opt.autowrite = true -- Enable auto write
+opt.undofile = true
+opt.undolevels = 10000
+opt.updatetime = 200 -- Save swap file and trigger CursorHold
+opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 
+-- ============================================================================
+-- CLIPBOARD AND SYSTEM INTEGRATION
+-- ============================================================================
+-- Only set clipboard if not in ssh, to make sure the OSC 52
+-- integration works automatically. Requires Neovim >= 0.10.0
+opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+
+-- ============================================================================
+-- TEXT FORMATTING AND DISPLAY
+-- ============================================================================
+opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
+opt.formatoptions = "jcroqlnt" -- tcqj
+opt.list = true -- Show some invisible characters (tabs...)
+opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+opt.shortmess:append({ W = true, I = true, c = true, C = true })
+
+-- ============================================================================
+-- SPELL CHECKING
+-- ============================================================================
+opt.spelllang = { "en" }
+opt.spelloptions:append("noplainbuffer")
+
+-- ============================================================================
+-- LAZYVIM GLOBAL CONFIGURATION
+-- ============================================================================
 vim.g.autoformat = true
 
 -- LazyVim picker to use.
@@ -43,15 +130,9 @@ vim.g.lazygit_config = true
 
 -- Options for the LazyVim statuscolumn
 vim.g.lazyvim_statuscolumn = {
-  folds_open = false, -- show fold sign when fold is open
-  folds_githl = false, -- highlight fold sign with git sign color
+    folds_open = false, -- show fold sign when fold is open
+    folds_githl = false, -- highlight fold sign with git sign color
 }
-
--- Optionally setup the terminal to use
--- This sets `vim.o.shell` and does some additional configuration for:
--- * pwsh
--- * powershell
--- LazyVim.terminal.setup("pwsh")
 
 -- Hide deprecation warnings
 vim.g.deprecation_warnings = false
@@ -59,65 +140,26 @@ vim.g.deprecation_warnings = false
 -- Show the current document symbols location from Trouble in lualine
 vim.g.trouble_lualine = true
 
-local opt = vim.opt
+-- ============================================================================
+-- LANGUAGE-SPECIFIC SETTINGS
+-- ============================================================================
+-- Fix markdown indentation settings
+vim.g.markdown_recommended_style = 0
 
-opt.autowrite = true -- Enable auto write
--- only set clipboard if not in ssh, to make sure the OSC 52
--- integration works automatically. Requires Neovim >= 0.10.0
-opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
-opt.completeopt = "menu,menuone,noselect"
-opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
-opt.confirm = true -- Confirm to save changes before exiting modified buffer
-opt.cursorline = true -- Enable highlighting of the current line
-opt.expandtab = true -- Use spaces instead of tabs
-opt.fillchars = {
-  foldopen = "",
-  foldclose = "",
-  fold = " ",
-  foldsep = " ",
-  diff = "╱",
-  eob = " ",
-}
-opt.foldlevel = 99
-opt.formatoptions = "jcroqlnt" -- tcqj
-opt.grepformat = "%f:%l:%c:%m"
-opt.grepprg = "rg --vimgrep"
-opt.ignorecase = true -- Ignore case
-opt.inccommand = "nosplit" -- preview incremental substitute
-opt.laststatus = 3 -- global statusline
-opt.linebreak = true -- Wrap lines at convenient points
-opt.list = true -- Show some invisible characters (tabs...
-opt.mouse = "a" -- Enable mouse mode
-opt.number = true -- Print line number
-opt.pumblend = 10 -- Popup blend
-opt.pumheight = 10 -- Maximum number of entries in a popup
-opt.relativenumber = true -- Relative line numbers
-opt.scrolloff = 4 -- Lines of context
-opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
-opt.shiftround = true -- Round indent
-opt.shiftwidth = 2 -- Size of an indent
-opt.shortmess:append({ W = true, I = true, c = true, C = true })
-opt.showmode = false -- Dont show mode since we have a statusline
-opt.sidescrolloff = 8 -- Columns of context
-opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
-opt.smartcase = true -- Don't ignore case with capitals
-opt.smartindent = true -- Insert indents automatically
-opt.spelllang = { "en" }
-opt.spelloptions:append("noplainbuffer")
-opt.splitbelow = true -- Put new windows below current
-opt.splitkeep = "screen"
-opt.splitright = true -- Put new windows right of current
-opt.tabstop = 2 -- Number of spaces tabs count for
-opt.termguicolors = true -- True color support
-opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
-opt.undofile = true
-opt.undolevels = 10000
-opt.updatetime = 200 -- Save swap file and trigger CursorHold
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-opt.wildmode = "longest:full,full" -- Command-line completion mode
-opt.winminwidth = 5 -- Minimum window width
-opt.wrap = false -- Disable line wrap
+-- ============================================================================
+-- COMMENTED OUT CONFIGURATIONS
+-- ============================================================================
+-- Optionally setup the terminal to use
+-- This sets `vim.o.shell` and does some additional configuration for:
+-- * pwsh
+-- * powershell
+-- LazyVim.terminal.setup("pwsh")
 
+-- Colorscheme configuration (commented out)
+-- local colorscheme = require("helpers.colorscheme")
+-- vim.cmd.colorscheme(colorscheme)
+
+-- Version-specific options (commented out)
 -- if vim.fn.has("nvim-0.10") == 1 then
 --   opt.smoothscroll = true
 --   opt.foldmethod = "expr"
@@ -125,8 +167,3 @@ opt.wrap = false -- Disable line wrap
 -- else
 --   opt.foldmethod = "indent"
 -- end
-opt.foldmethod = "indent"
-
--- Fix markdown indentation settings
-vim.g.markdown_recommended_style = 0
-opt.laststatus = 3
