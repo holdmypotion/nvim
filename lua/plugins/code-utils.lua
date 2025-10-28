@@ -164,6 +164,16 @@ return {
                 severity_sort = true,
             })
 
+            vim.keymap.set("n", "<leader>xd", function()
+                if vim.diagnostic.is_enabled() then
+                    vim.diagnostic.disable()
+                    vim.notify("Diagnostics disabled", "info")
+                else
+                    vim.diagnostic.enable()
+                    vim.notify("Diagnostics enabled", "info")
+                end
+            end, { desc = "Toggle Diagnostics" })
+
             mason_lspconfig.setup({
                 -- default handler for installed servers
                 function(server_name)
