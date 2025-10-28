@@ -129,10 +129,17 @@ return {
     --     },
     -- },
     {
-    "supermaven-inc/supermaven-nvim",
-    config = function()
-        require("supermaven-nvim").setup({})
-        vim.keymap.set("n", "<leader>sm", "<cmd>SupermavenToggle<cr>", { desc = "Toggle Supermaven" })
-    end,
+        "supermaven-inc/supermaven-nvim",
+        config = function()
+            require("supermaven-nvim").setup({})
+            vim.keymap.set("n", "<leader>sm", "<cmd>SupermavenToggle<cr>", { desc = "Toggle Supermaven" })
+        end,
+    },
+    -- Amp Plugin
+    {
+        "sourcegraph/amp.nvim",
+        branch = "main", 
+        lazy = false,
+        opts = { auto_start = true, log_level = "info" },
     },
 }
