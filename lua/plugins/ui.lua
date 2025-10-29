@@ -32,7 +32,9 @@ return {
                 winbar = {
                     lualine_a = {},
                     lualine_b = {},
-                    lualine_c = {'filename'},
+                    -- uncomment to show filename on the tabline
+                    -- lualine_c = {'filename'},
+                    lualine_c = {},
                     lualine_x = {},
                     lualine_y = {},
                     lualine_z = {}
@@ -40,7 +42,9 @@ return {
                 inactive_winbar = {
                     lualine_a = {},
                     lualine_b = {},
-                    lualine_c = {'filename'},
+                    -- uncomment to show filename on the tabline
+                    -- lualine_c = {'filename'},
+                    lualine_c = {},
                     lualine_x = {},
                     lualine_y = {},
                     lualine_z = {}
@@ -174,5 +178,12 @@ return {
             end,
         },
     },
-
+    {
+        'akinsho/bufferline.nvim',
+        version = "*",
+        dependencies = 'nvim-tree/nvim-web-devicons',
+        config = function()
+            require("bufferline").setup{}
+        end
+    }
 }
