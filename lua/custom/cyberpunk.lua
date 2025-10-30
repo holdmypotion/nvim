@@ -99,8 +99,8 @@ function M.setup()
     TabLineSel = { fg = colors.bright_fg, bg = colors.bg },
 
     -- Terminal colors
-    TermCursor = { fg = colors.bg, bg = colors.bright_fg },
-    TermCursorNC = { fg = colors.bg, bg = colors.comment },
+    -- TermCursor = { fg = colors.bg, bg = colors.bright_fg },
+    -- TermCursorNC = { fg = colors.bg, bg = colors.comment },
     -- TermCursor = { fg = colors.fg },
     -- TermCursorNC = { fg = colors.comment },
   }
@@ -111,21 +111,23 @@ function M.setup()
   end
 
   -- Set terminal colors
-  vim.g.terminal_color_0 = "#10d4b0"
-  vim.g.terminal_color_1 = "#940303"
-  vim.g.terminal_color_2 = "#0059ff"
+  -- vim.g.terminal_color_0 = "#10d4b0"
+  -- vim.g.terminal_color_1 = "#940303"
+  -- vim.g.terminal_color_2 = "#0059ff"
+  -- -- This is the only color that we need to make the default setup work.
+  -- -- This is the highlight color for the cursor in lazygit.
   vim.g.terminal_color_4 = "#004cf1"
-  vim.g.terminal_color_5 = "#94058a"
-  vim.g.terminal_color_6 = "#029790"
-  vim.g.terminal_color_7 = "#311b92"
-  vim.g.terminal_color_8 = "#02adf1"
-  vim.g.terminal_color_9 = "#be0000"
-  vim.g.terminal_color_10 = "#00ff9c"
-  vim.g.terminal_color_11 = "#d0f30c"
-  vim.g.terminal_color_12 = "#00a2ff"
-  vim.g.terminal_color_13 = "#e215d6"
-  vim.g.terminal_color_14 = "#08e1d7"
-  vim.g.terminal_color_15 = "#2eb8f8"
+  -- vim.g.terminal_color_5 = "#94058a"
+  -- vim.g.terminal_color_6 = "#029790"
+  -- vim.g.terminal_color_7 = "#311b92"
+  -- vim.g.terminal_color_8 = "#02adf1"
+  -- vim.g.terminal_color_9 = "#be0000"
+  -- vim.g.terminal_color_10 = "#00ff9c"
+  -- vim.g.terminal_color_11 = "#d0f30c"
+  -- vim.g.terminal_color_12 = "#00a2ff"
+  -- vim.g.terminal_color_13 = "#e215d6"
+  -- vim.g.terminal_color_14 = "#08e1d7"
+  -- vim.g.terminal_color_15 = "#2eb8f8"
 end
 
 return M
