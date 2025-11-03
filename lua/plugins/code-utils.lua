@@ -127,8 +127,6 @@ return {
                     'pyright',
                     'eslint',
                     'clangd',
-                    'ruby_lsp',
-                    'rubocop'
                 },
             })
 
@@ -202,15 +200,6 @@ return {
                         filetypes = {"c", "cpp", "objc", "objcpp"},
                     })
                 end,
-                -- ["ruby_lsp"] = function()
-                --   lspconfig["ruby_lsp"].setup({
-                --     init_options = {
-                --       enabledFeatures = {
-                --         semanticHighlighting = false
-                --       }
-                --     },
-                --   })
-                -- end
             })
         end,
     },
