@@ -70,7 +70,7 @@ map("n", "<leader>da", buffers.delete_all, "All buffers")
 -- ═══════════════════════════════════════════
 
 -- Essential mappings
-vim.keymap.set("i", "jk", "<Esc>")
+-- vim.keymap.set("i", "jk", "<Esc>")
 vim.keymap.set("n", "J", "mzJ`z")
 
 -- Visual mode improvements
