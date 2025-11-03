@@ -4,6 +4,8 @@ return {
     dependencies = {
         "nvim-lua/plenary.nvim",
         "nvim-tree/nvim-web-devicons",
+        "nvim-telescope/telescope-smart-history.nvim",
+        "kkharji/sqlite.lua",
         "folke/todo-comments.nvim",
         { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
         { "nvim-telescope/telescope-ui-select.nvim" },
@@ -45,6 +47,10 @@ return {
         telescope.setup({
             path_display = { "smart" },
             defaults = {
+                history = {
+                    path = vim.fn.expand('~/.local/share/nvim/databases/telescope_history.sqlite3'),
+                    limit = 100,
+                },
                 vimgrep_arguments = {
                     "rg",
                     "--color=never",
@@ -89,6 +95,8 @@ return {
                         ["<c-enter>"] = "to_fuzzy_refine",
                         ["<C-k>"] = quote_prompt_with(),
                         ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob **//**" }),
+                        ["<Up>"] = actions.cycle_history_prev,
+                        ["<Down>"] = actions.cycle_history_next,
                         ["<M-BS>"] = function()
                             vim.api.nvim_feedkeys(
                                 vim.api.nvim_replace_termcodes("<C-S-W>", true, true, true),
@@ -108,6 +116,7 @@ return {
         telescope.load_extension("fzf")
         telescope.load_extension("ui-select")
         telescope.load_extension("live_grep_args")
+        telescope.load_extension("smart_history")
 
         local function fuzzy_find_in_buffer()
             local opts = require("telescope.themes").get_dropdown({
