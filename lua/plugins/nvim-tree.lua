@@ -18,12 +18,14 @@ return {
                     },
                 },
                 highlight_git = true,
-                highlight_opened_files = "none",
+                highlight_opened_files = "icon",
             },
             hijack_netrw = false,
-            filters = { dotfiles = false, custom = { '^.git$' }},
+            filters = { dotfiles = true, custom = { '^.git$' }},
             git = {
                 enable = true,
+                ignore = false,
+                clean = true
             },
         })
         vim.keymap.set("n", "<leader>et", "<cmd>NvimTreeFindFileToggle<CR>", { desc = "Toggle NvimTree with current file", silent = true })
