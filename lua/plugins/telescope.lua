@@ -93,10 +93,10 @@ return {
                 mappings = {
                     i = vim.tbl_extend("force", shared_mappings, {
                         ["<c-enter>"] = "to_fuzzy_refine",
-                        ["<C-k>"] = quote_prompt_with(),
+                        ["<C-p>"] = quote_prompt_with(),
                         ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob **//**" }),
-                        ["<Up>"] = actions.cycle_history_prev,
-                        ["<Down>"] = actions.cycle_history_next,
+                        ["<C-j>"] = actions.cycle_history_prev,
+                        ["<C-k>"] = actions.cycle_history_next,
                         ["<M-BS>"] = function()
                             vim.api.nvim_feedkeys(
                                 vim.api.nvim_replace_termcodes("<C-S-W>", true, true, true),
