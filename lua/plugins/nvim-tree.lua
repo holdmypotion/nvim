@@ -24,8 +24,7 @@ return {
             filters = { dotfiles = true, custom = { '^.git$' }},
             git = {
                 enable = true,
-                ignore = false,
-                clean = true
+                ignore = false
             },
         })
         vim.keymap.set("n", "<leader>et", "<cmd>NvimTreeFindFileToggle<CR>", { desc = "Toggle NvimTree with current file", silent = true })
