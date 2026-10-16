@@ -10,10 +10,61 @@ return {
             "nvim-treesitter/nvim-treesitter-context",
         },
         config = function()
+            -- Register custom filetype aliases with Treesitter parsers
+            vim.treesitter.language.register("textproto", { "pbtxt", "textproto" })
+            vim.treesitter.language.register("starlark", { "bzl", "bazel", "starlark" })
+
             require("nvim-treesitter.configs").setup({
                 -- Add languages to be installed here that you want installed for treesitter
-                ensure_installed = { "c", "cpp", "go", "lua", "python", "rust", "vimdoc", "vim", "markdown" },
+                ensure_installed = {
+                    -- Systems & Core
+                    "c",
+                    "cpp",
+                    "go",
+                    "gomod",
+                    "gosum",
+                    "gowork",
+                    "rust",
+                    "python",
+                    "java",
+                    "kotlin",
+                    "dart",
+                    -- Config / Data / Query formats
+                    "proto",
+                    "textproto",
+                    "starlark",
+                    "sql",
+                    "graphql",
+                    "hcl",
+                    "json",
+                    "jsonc",
+                    "yaml",
+                    "toml",
+                    "xml",
+                    -- Web & Scripting
+                    "javascript",
+                    "typescript",
+                    "tsx",
+                    "html",
+                    "css",
+                    "bash",
+                    "dockerfile",
+                    -- Neovim / Docs / Git
+                    "lua",
+                    "luadoc",
+                    "vim",
+                    "vimdoc",
+                    "query",
+                    "regex",
+                    "diff",
+                    "git_config",
+                    "gitcommit",
+                    "gitignore",
+                    "markdown",
+                    "markdown_inline",
+                },
 
+                auto_install = true,
                 highlight = { enable = true },
                 indent = { enable = true, disable = { "python" } },
                 incremental_selection = {

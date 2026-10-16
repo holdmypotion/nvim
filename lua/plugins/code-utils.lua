@@ -32,7 +32,7 @@ return {
                     -- Jump to the type of the word under your cursor.
                     --  Useful when you're not sure what type a variable is and you want to see
                     --  the definition of its *type*, not where it was *defined*.
-                    map('gD', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+                    map('gt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
                     -- Fuzzy find all the symbols in your current document.
                     --  Symbols are things like variables, functions, types, etc.
@@ -60,29 +60,6 @@ return {
 
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-                    if client and client.server_capabilities.documentHighlightProvider then
-                        -- local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-                        -- vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-                        --   buffer = event.buf,
-                        --   group = highlight_augroup,
-                        --   callback = vim.lsp.buf.document_highlight,
-                        -- })
-                        --
-                        -- vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-                        --   buffer = event.buf,
-                        --   group = highlight_augroup,
-                        --   callback = vim.lsp.buf.clear_references,
-                        -- })
-                        --
-                        -- vim.api.nvim_create_autocmd('LspDetach', {
-                        --   group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-                        --   callback = function(event2)
-                        --     vim.lsp.buf.clear_references()
-                        --     vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-                        --   end,
-                        -- })
-                    end
-
                     if client and client.server_capabilities.documentFormattingProvider then
                         map('<leader>fd', function()
                             vim.lsp.buf.format({ async = true })
@@ -91,8 +68,6 @@ return {
 
                     -- The following autocommand is used to enable inlay hints in your
                     -- code, if the language server you are using supports them
-                    --
-                    -- This may be unwanted, since they displace some of your code
                     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
                         map('<leader>th', function()
                             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
@@ -102,7 +77,6 @@ return {
             })
 
             local mason = require('mason')
-
             mason.setup({
                 ui = {
                     icons = {
@@ -114,32 +88,8 @@ return {
             })
 
             local lspconfig = require("lspconfig")
-            local mason_lspconfig = require("mason-lspconfig")
             local cmp_nvim_lsp = require("cmp_nvim_lsp")
             local capabilities = cmp_nvim_lsp.default_capabilities()
-            local mason_tool_installer = require("mason-tool-installer")
-
-
-            mason_lspconfig.setup({
-                -- list of servers for mason to install
-                ensure_installed = {
-                    'luau_lsp',
-                    'pyright',
-                    'eslint',
-                    'clangd',
-                },
-            })
-
-            mason_tool_installer.setup({
-                ensure_installed = {
-                    "prettier", -- prettier formatter
-                    'stylua',
-                    "isort",    -- python formatter
-                    "black",    -- python formatter
-                    "pylint",
-                    "eslint_d",
-                },
-            })
 
             local sign_icons = {
                 [vim.diagnostic.severity.ERROR] = " ",
@@ -151,13 +101,10 @@ return {
             -- Apply diagnostic configuration for Neovim 0.11+
             vim.diagnostic.config({
                 signs = {
-                    enabled = true,  -- ensure signs are shown
+                    enabled = true,
                     text = sign_icons,
-                    -- Optionally highlight the whole line or number differently
-                    -- linehl = false,
-                    -- numhl = false,
                 },
-                virtual_text = false,     -- customize other diagnostic display settings
+                virtual_text = false,
                 underline = true,
                 severity_sort = true,
             })
@@ -172,35 +119,58 @@ return {
                 end
             end, { desc = "Toggle Diagnostics" })
 
-            mason_lspconfig.setup({
-                -- default handler for installed servers
-                function(server_name)
-                    lspconfig[server_name].setup({
-                        capabilities = capabilities,
-                    })
-                end,
-                ["lua_ls"] = function()
-                    -- configure lua server (with special settings)
-                    lspconfig["lua_ls"].setup({
-                        capabilities = capabilities,
-                        settings = {
-                            Lua = {
-                                completion = {
-                                    callSnippet = 'Replace',
+            if not vim.g.is_work_env then
+                local mason_lspconfig = require("mason-lspconfig")
+                local mason_tool_installer = require("mason-tool-installer")
+
+                mason_lspconfig.setup({
+                    ensure_installed = {
+                        'luau_lsp',
+                        'pyright',
+                        'eslint',
+                        'clangd',
+                    },
+                })
+
+                mason_tool_installer.setup({
+                    ensure_installed = {
+                        "prettier",
+                        'stylua',
+                        "isort",
+                        "black",
+                        "pylint",
+                        "eslint_d",
+                    },
+                })
+
+                mason_lspconfig.setup({
+                    function(server_name)
+                        lspconfig[server_name].setup({
+                            capabilities = capabilities,
+                        })
+                    end,
+                    ["lua_ls"] = function()
+                        lspconfig["lua_ls"].setup({
+                            capabilities = capabilities,
+                            settings = {
+                                Lua = {
+                                    completion = {
+                                        callSnippet = 'Replace',
+                                    },
+                                    diagnostics = { disable = { 'missing-fields' } },
                                 },
-                                diagnostics = { disable = { 'missing-fields' } },
                             },
-                        },
-                    })
-                end,
-                ['clangd'] = function()
-                    lspconfig['clangd'].setup({
-                        capabilities = capabilities,
-                        cmd = {"clangd"},
-                        filetypes = {"c", "cpp", "objc", "objcpp"},
-                    })
-                end,
-            })
+                        })
+                    end,
+                    ['clangd'] = function()
+                        lspconfig['clangd'].setup({
+                            capabilities = capabilities,
+                            cmd = {"clangd"},
+                            filetypes = {"c", "cpp", "objc", "objcpp"},
+                        })
+                    end,
+                })
+            end
         end,
     },
 

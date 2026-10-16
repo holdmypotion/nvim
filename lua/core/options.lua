@@ -84,9 +84,26 @@ opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "glob
 -- ============================================================================
 -- CLIPBOARD AND SYSTEM INTEGRATION
 -- ============================================================================
--- Only set clipboard if not in ssh, to make sure the OSC 52
--- integration works automatically. Requires Neovim >= 0.10.0
-opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+-- Sync with system clipboard (+ register) even over SSH/Mosh/Tmux
+opt.clipboard = "unnamedplus"
+
+if (vim.env.SSH_TTY or vim.env.TMUX) and vim.fn.executable("/usr/bin/pbcopy") == 0 then
+  local pbcopy = vim.fn.expand("~/.local/bin/pbcopy")
+  local pbpaste = vim.fn.expand("~/.local/bin/pbpaste")
+  if vim.fn.executable(pbcopy) == 1 then
+    vim.g.clipboard = {
+      name = "pbcopy-osc52 (tmux/mosh)",
+      copy = {
+        ["+"] = { pbcopy },
+        ["*"] = { pbcopy },
+      },
+      paste = {
+        ["+"] = { pbpaste },
+        ["*"] = { pbpaste },
+      },
+    }
+  end
+end
 
 -- ============================================================================
 -- TEXT FORMATTING AND DISPLAY

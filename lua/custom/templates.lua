@@ -73,8 +73,8 @@ void potion() {
 signed main() {
   fast_cin();
 #ifndef ONLINE_JUDGE
-  freopen("/Users/loona-mac/personal/mind-sport/input.txt", "r", stdin);
-  // freopen("/Users/loona-mac/personal/mind-sport/output.txt", "w", stdout);
+  freopen("]=] .. vim.fn.expand("$HOME/personal/mind-sport/input.txt") .. [=[", "r", stdin);
+  // freopen("]=] .. vim.fn.expand("$HOME/personal/mind-sport/output.txt") .. [=[", "w", stdout);
 #endif
   int t; cin >> t;
   while (t--) potion();
@@ -101,8 +101,8 @@ INF = float('inf')
 NINF = float('-inf')
 
 # Fast I/O setup
-sys.stdin = open('/Users/loona-mac/personal/mind-sport/input.txt', 'r')
-# sys.stdout = open('/Users/loona-mac/personal/mind-sport/output.txt', 'w', buffering=1)
+sys.stdin = open(']=] .. vim.fn.expand("$HOME/personal/mind-sport/input.txt") .. [=[', 'r')
+# sys.stdout = open(']=] .. vim.fn.expand("$HOME/personal/mind-sport/output.txt") .. [=[', 'w', buffering=1)
 input = sys.stdin.readline
 # Fast input functions
 def inp(): return input().strip()
