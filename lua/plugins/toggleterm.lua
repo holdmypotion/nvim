@@ -58,15 +58,6 @@ return {
             }),
         }
 
-        if vim.fn.executable("lazyhg") == 1 then
-            terminals.lazyhg = Terminal:new({
-                cmd = "lazyhg",
-                hidden = false,
-                direction = "float",
-                float_opts = float_opts,
-            })
-        end
-
         -- Toggle function
         local function toggle_term(name)
             local term = terminals[name]
@@ -97,9 +88,6 @@ return {
 
         -- Custom terminal toggles
         vim.keymap.set("n", "<leader>gg", function() toggle_term("lazygit") end, opts)
-        if terminals.lazyhg then
-            vim.keymap.set("n", "<leader>gh", function() toggle_term("lazyhg") end, opts)
-        end
         vim.keymap.set("n", "<leader>bt", function() toggle_term("btop") end, opts)
         vim.keymap.set("n", "<leader>ag", function() toggle_term("gemini") end, opts)
     end,

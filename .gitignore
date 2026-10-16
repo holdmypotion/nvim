@@ -1,0 +1,4 @@
+# Machine-local / work-specific overrides
+lua/plugins/work*.lua
+lua/plugins/local*.lua
+after/syntax/
